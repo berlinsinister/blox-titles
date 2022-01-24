@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blox New titles</title>
+    <style>
+      @font-face {
+        font-family: 'FiraGO';
+        src: url('./fonts/FiraGO-Regular.eot'); /* IE9 Compat Modes */
+        src: url('./fonts/FiraGO-Regular.eot?#iefix')
+            format('embedded-opentype'),
+          /* IE6-IE8 */ url('./fonts/FiraGO-Regular.woff2') format('woff2'),
+          /* Super Modern Browsers */ url('./fonts/FiraGO-Regular.woff')
+            format('woff'),
+          /* Pretty Modern Browsers */ url('./fonts/FiraGO-Regular.ttf')
+            format('truetype'); /* Safari, Android, iOS */
+      }
+      @font-face {
+        font-family: 'FiraGO';
+        font-style: normal;
+        font-weight: 600;
+        src: url(https://free.bboxtype.com/embedfonts/fonts.php?family=FiraGO&weight=600)
+          format('woff');
+      }
+      @font-face {
+        font-family: 'FiraGO';
+        font-style: normal;
+        font-weight: 700;
+        src: url(https://free.bboxtype.com/embedfonts/fonts.php?family=FiraGO&weight=700)
+          format('woff');
+      }
+
+      @font-face {
+        font-family: 'Adieu';
+        src: url('../fonts/Adieu-Bold.eot');
+        src: local('../fonts/Adieu Bold'), local('Adieu-Bold'),
+          url('../fonts/Adieu-Bold.eot?#iefix') format('embedded-opentype'),
+          url('../fonts/Adieu-Bold.woff2') format('woff2'),
+          url('../fonts/Adieu-Bold.woff') format('woff'),
+          url('../fonts/Adieu-Bold.ttf') format('truetype');
+        font-weight: bold;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      .title-container {
+        position: relative;
+        overflow: hidden;
+        /* border: 1px solid red; */
+        width: fit-content;
+        display: flex;
+      }
+      .title-text {
+        /* font-family: 'FiraGO', monospace; */
+        font-size: 100px;
+        font-weight: 700;
+        font-feature-settings: 'case' on;
+        letter-spacing: -3px;
+        color: #211c35;
+        white-space: nowrap;
+      }
+      .diagonal {
+        border: none;
+        border-right: 2px solid #211c35;
+        /* border: 1px solid blue; */
+        width: 1px;
+        height: 200px;
+        transform: skew(-60deg);
+        /* background: #fff; */
+        position: absolute;
+        top: 0;
+      }
+      .diagonal::before,
+      .diagonal::after {
+        content: '';
+        position: absolute;
+        /* width: 30px; */
+        width: 45px;
+        /* height: 40px; */
+        background: #fff;
+        /* background: lavender; */
+      }
+      .diagonal::before {
+        bottom: 90px;
+        left: 3px;
+        height: 30px;
+      }
+      .diagonal::after {
+        top: 0;
+        left: -44px; /* 29px */
+        height: 55px;
+      }
+      @media screen and (max-width: 1024px) {
+        .title-container {
+          transform: scale(0.8);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="title-container">
+      <!-- <div class="title-text">პროექტები</div> -->
+      <div class="title-text"></div>
+      <div class="diagonal"></div>
+      <div class="title-text"></div>
+    </div>
+
+    <select name="locales" id="select-locales" style="margin-top: 50px">
+      <option value="projects">ka</option>
+      <option value="about-us">en</option>
+      <option value="find-flat">ru</option>
+    </select>
+
+    <select name="titles" id="select-titles" style="margin-top: 50px">
+      <option value="projects">პროექტები</option>
+      <option value="about-us">ჩვენს შესახებ</option>
+      <option value="find-flat">მოძებნე ბინა</option>
+      <option value="find-flat">საოფისე და კომერციული</option>
+      <option value="contact">კონტაქტი</option>
+      <option value="contact">სიახლეები</option>
+    </select>
+  </body>
+
+  <script>
+    const locales = {
+      ka: [
+        'პროექტები',
+        'ჩვენს შესახებ',
+        'მოძებნე ბინა',
+        'საოფისე და კომერციული',
+        'კონტაქტი',
+        'სიახლეები',
+      ],
+      en: [
+        'Blox Projects',
+        'About Blox',
+        'Search Apartments',
+        'Office & Commercial',
+        'Get in touch',
+        'Latest News',
+      ],
+      ru: [
+        'Проекты',
+        'О нас',
+        'Поиск квартиры',
+        'Офисы и коммерция',
+        'Контакт',
+        'Новости',
+      ],
+    };
+    let lang = 'ka'; // default setting
+    const lefts = {
+      ka: 35,
+      en: 25,
+      ru: 25,
+    };
+    let left = 35; // default setting
+    let margins = {
+      ka: 65,
+      en: 55,
+      ru: 55,
+    };
+    let margin = 65; // default setting
+
+    // select locales
+    const selectLocales = document.getElementById('select-locales');
+    const selectTitles = document.getElementById('select-titles');
+    selectLocales.addEventListener('change', () => {
+      lang = selectLocales.options[selectLocales.selectedIndex].text;
+      left = lefts[lang];
+      margin = margins[lang];
+      for (let i = 0; i < selectTitles.options.length; i++) {
+        selectTitles.options[i].innerText = locales[lang][i];
+        // console.log(selectTitles.options[i].innerText);
+      }
+      let text = selectTitles.options[selectTitles.selectedIndex].text;
+      setTitle(text);
+    });
+
+    // select titles
+    selectTitles.addEventListener('change', () => {
+      let text = selectTitles.options[selectTitles.selectedIndex].text;
+      // console.log(text);
+      setTitle(text);
+    });
+
+    const titleContainer = document.querySelector('.title-container');
+    const titleTxt = [...document.querySelectorAll('.title-text')];
+    const diagonal = document.querySelector('.diagonal');
+
+    setTitle(selectTitles.options[0].text);
+
+    function setTitle(txt) {
+      // reset
+      titleTxt.forEach((item) => {
+        item.innerText = null;
+        item.style.marginLeft = 0;
+        item.style.fontFamily =
+          lang === 'ka' ? "'FiraGO', monospace" : "'Adieu', monospace";
+      });
+      diagonal.style.left = 0;
+      // end of reset
+
+      let words = txt.split(' ');
+      if (words.length == 1) {
+        titleTxt[0].innerText = txt;
+        titleTxt[0].style.marginLeft = 90 + 'px';
+        diagonal.style.left = -10 + 'px';
+      } else {
+        if (words.length == 3) {
+          words[0] = words[0].concat(' ').concat(words[1]);
+          words[1] = words[2];
+          words.pop();
+        }
+        console.log(words);
+        titleTxt[0].innerText = words[0];
+        titleTxt[1].innerText = words[1];
+
+        titleTxt[1].style.marginLeft = margin + 'px';
+        let offset = titleTxt[0].clientWidth;
+        diagonal.style.left = offset - left + 'px';
+      }
+    }
+  </script>
+</html>
